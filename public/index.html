@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ObservIt</title>
+    <link href="../src/output.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header class="bg-white shadow-md">
+      <div
+        class="container mx-auto p-4 items-center md:flex md:justify-between"
+      >
+        <div class="flex justify-between">
+          <a href="" class="logo-link"
+            ><img src="vjh" alt="App Logo" class="logo h-10 w-10" />Field
+            Observation App</a
+          >
+
+          <!-- Nav Toggle button -->
+          <div class="block md:hidden">
+            <button id="nav-toggle" class="text-blue-500 focus:outline-none">
+              <span class="text-green-400">Burger</span>
+            </button>
+          </div>
+        </div>
+
+        <nav>
+          <ul
+            id="nav-menu"
+            class="hidden space-x-4 bg-green-500 text-white md:flex md:h-auto p-2 m-1"
+          >
+            <li class="p-1 m-1">
+              <a href="#" class="text-white-500 hover:text-blue-700">Home</a>
+            </li>
+            <li class="p-1 m-1">
+              <a href="#" class="text-white-500 hover:text-blue-700"
+                >New Count</a
+              >
+            </li>
+            <li class="p-1 m-1">
+              <a href="#" class="text-white-500 hover:text-blue-700"
+                >Observations</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main content -->
+    <main>
+      <section id="main-section" class="min-h-[70vh]">
+        <div class="p-4 mb-6">
+          <h1 class="count-name text-3xl font-bold">Count A</h1>
+        </div>
+
+        <div
+          id="count-item-container"
+          class="space-y-6 flex flex-wrap gap-2 justify-between"
+        >
+          <!-- Count Item -->
+          <div
+            class="count-item relative border border-3 border-green-800 bg-white p-4 shadow-md space-y-4 md:max-w-[50%]"
+          >
+            <!-- remove item -->
+            <button
+              class="remove-btn absolute top-0.5 right-1 text-white font-mono font-bold bg-red-800 p-1 rounded-lg active:bg-red-500"
+              onclick="removeItem(this)"
+            >
+              X
+            </button>
+
+            <!-- Item image field -->
+            <div class="observation-image-container flex flex-col">
+              <label for="observationImage" class="text-sm font-bold mb-1"
+                >Image</label
+              >
+              <input
+                type="file"
+                class="observation-image"
+                name="observationImage"
+                accept="image/*"
+                capture="environment"
+                class="border rounded p-2"
+                alt=""
+              />
+            </div>
+
+            <!-- Item species name field -->
+            <div class="observation-name-container flex flex-col">
+              <label for="speciesName" class="text-sm font-bold mb-1"
+                >Species Name:</label
+              >
+              <input
+                type="text"
+                placeholder="Species name/s (comma-separated)"
+                name="speciesName"
+                class="species-name border rounded p-2"
+              />
+            </div>
+
+            <!-- Item Field name  -->
+            <div class="observation-name-container flex flex-col">
+              <label for="observationName" class="text-sm font-bold mb-1"
+                >Field Name:</label
+              >
+              <input
+                type="text"
+                placeholder="name/s (comma-separated)"
+                name="observationName"
+                class="observation-name border rounded p-2"
+              />
+            </div>
+
+            <!-- Item count field -->
+            <div class="observation-count-container">
+              <label for="observationCount" class="text-sm font-bold mb-1"
+                >Count:</label
+              >
+              <div>
+                <button class="count-minus" onclick="decrementCount(this)">
+                  -
+                </button>
+                <input
+                  type="number"
+                  min="0"
+                  name="observationCount"
+                  class="observation-count text-center w-16 border rounded p-2"
+                  value="0"
+                  id=""
+                />
+                <button class="count-plus" onclick="incrementCount(this)">
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="addCountItem">
+          <button
+            class="mt-4 fixed bottom-1 right-2 shadow-md shadow-green-950 bg-green-700 text-white px-4 py-2 rounded active:bg-blue-300 transition-all duration-100"
+            onclick="addCountItem()"
+          >
+            Add New Observation
+          </button>
+        </div>
+      </section>
+    </main>
+    <footer>
+      ObservIt is an ecological observation tool created by Blessing Adeyemi.
+      @copy 2024
+    </footer>
+  </body>
+  <script src="../script/script.js"></script>
+</html>
