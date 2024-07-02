@@ -9,6 +9,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
     />
+    <script src="../script/filesaver.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx.full.min.js"></script>
   </head>
   <body>
     <header class="bg-white shadow-md">
@@ -17,7 +19,7 @@
       >
         <div class="flex justify-between">
           <a href="" class="logo-link"
-            ><img src="vjh" alt="App Logo" class="logo h-10 w-10" />Field
+            ><img src="hjh" alt="App Logo" class="logo h-10 w-10" />Field
             Observation App</a
           >
 
@@ -55,13 +57,30 @@
     <!-- Main content -->
     <main>
       <section id="main-section" class="min-h-[70vh]">
-        <div class="p-4 mb-6">
-          <h1 class="count-name text-3xl font-bold">Count A</h1>
+        <div class="p-4 mb-6 flex flex-col items-center gap-4">
+          <h1 id="count-title" class="count-name text-3xl font-bold">
+            New Count
+          </h1>
+          <div class="flex items-center space-x-2">
+            <input
+              type="text"
+              name="title"
+              id="title-input"
+              class="border rounded p-2"
+              placeholder="Enter new title"
+            />
+            <button
+              class="bg-blue-500 text-white px-4 py-2 rounded"
+              onclick="renameTitle()"
+            >
+              Rename
+            </button>
+          </div>
         </div>
 
         <div
-          id="count-item-container"
-          class="space-y-6 flex flex-wrap gap-2 justify-between"
+          id="count-items-container"
+          class="p-4 space-y-6 flex flex-wrap gap-2 justify-between"
         >
           <!-- Count Item -->
           <div
@@ -82,14 +101,19 @@
               >
               <input
                 type="file"
-                class="observation-image"
+                class="observation-image border rounded p-2"
                 name="observationImage"
                 accept="image/*"
                 capture="environment"
-                class="border rounded p-2"
-                alt=""
+                multiple
+                onchange="displayImages(this)"
               />
             </div>
+
+            <!-- Image preview -->
+            <div
+              class="image-preview flex gap-2 flex-column max-w-max overflow-scroll overflow-y-hidden"
+            ></div>
 
             <!-- Item species name field -->
             <div class="observation-name-container flex flex-col">
@@ -98,7 +122,7 @@
               >
               <input
                 type="text"
-                placeholder="Species name/s (comma-separated)"
+                placeholder="Species name"
                 name="speciesName"
                 class="species-name border rounded p-2"
               />
@@ -142,12 +166,18 @@
           </div>
         </div>
 
-        <div id="addCountItem">
+        <div class="fixed bottom-4 right-2 flex gap-2">
           <button
-            class="mt-4 fixed bottom-1 right-2 shadow-md shadow-green-950 bg-green-700 text-white px-4 py-2 rounded active:bg-blue-300 transition-all duration-100"
+            class="mt-4 shadow-md shadow-green-950 bg-green-700 text-white px-4 py-2 rounded active:bg-blue-300 transition-all duration-100"
             onclick="addCountItem()"
           >
             Add New Observation
+          </button>
+          <button
+            class="mt-4 shadow-md shadow-green-950 bg-green-700 text-white px-4 py-2 rounded active:bg-blue-300 transition-all duration-100"
+            onclick="exportCountItems()"
+          >
+            Export
           </button>
         </div>
       </section>

@@ -1,17 +1,23 @@
+var xlsx = require("xlsx");
+
 // toggle navigation menu
 document.getElementById("nav-toggle").addEventListener("click", function () {
   const navMenu = document.getElementById("nav-menu");
   navMenu.classList.toggle("hidden");
 });
 
+const EXCEL_TYPE = ".xlsx";
+const EXCEL_EXTENSION =
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.charset=UTF-8";
+
 // Add count item
 function addCountItem() {
-  const countContainer = document.getElementById("count-item-container");
-  const newItem = document.createElement("div");
-  newItem.className =
+  const countContainer = document.getElementById("count-items-container");
+  const newCountItem = document.createElement("div");
+  newCountItem.className =
     "count-item relative border border-3 border-green-800 bg-white p-4 shadow-md space-y-4 md:max-w-[50%]";
 
-  newItem.innerHTML = `
+  newCountItem.innerHTML = `
   <!-- remove item -->
             <button
               class="remove-btn absolute top-0.5 right-1 text-white font-mono font-bold bg-red-800 p-1 rounded-lg active:bg-red-500"
@@ -85,7 +91,7 @@ function addCountItem() {
               </div>
   `;
 
-  countContainer.appendChild(newItem);
+  countContainer.appendChild(newCountItem);
 }
 
 function incrementCount(button) {
@@ -105,4 +111,96 @@ function removeItem(button) {
   console.log("close");
 
   countItem.remove();
+}
+
+function displayImages(input) {
+  const previewContainer = input.parentElement.nextSibling.nextElementSibling;
+  console.log(previewContainer);
+
+  Array.from(input.files).forEach((file) => {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const img = document.createElement("img");
+      img.src = e.target.result;
+      img.className = "w-15 object-cover rounded";
+      console.log(img);
+      console.log(previewContainer);
+      previewContainer.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renameTitle() {
+  const titleInput = document.getElementById("title-input");
+  const countTitle = document.getElementById("count-title");
+  const newTitle = titleInput.value;
+  if (newTitle.trim()) {
+    countTitle.innerText = newTitle;
+    titleInput.value = "";
+  }
+}
+
+// data structuring and exporting
+
+// Export function
+function exportCountItems() {
+  const countItems = document.getElementsByClassName("count-item");
+
+  if (countItems.length <= 1) {
+    alert("No data input");
+    return;
+  }
+  const observationData = [];
+  console.log("Exporting..........");
+  for (i = 0; i < countItems.length; i++) {
+    const element = countItems.item(i);
+    console.log(element);
+    const speciesName = element.getElementsByClassName("species-name")[0].value;
+    const fieldName =
+      element.getElementsByClassName("observation-name")[0].value;
+    const observationCount =
+      element.getElementsByClassName("observation-count")[0].value;
+    const item = {
+      speciesName: speciesName,
+      fieldName: fieldName,
+      count: observationCount,
+    };
+
+    observationData.push(item);
+  }
+  if (observationData.length <= 0) {
+    return "Message: no observation data to export";
+  }
+  const countTitle = document.getElementById("count-title");
+
+  exportToExcel(JSON.stringify(observationData), countTitle.innerText);
+  console.log("Exported");
+}
+
+function exportToExcel(jsonArr, outputFilename) {
+  // let workbook = xlsx.utils.book_new();
+  // xlsx.utils.book_append_sheet(
+  //   workbook,
+  //   xlsx.utils.json_to_sheet(jsonArr, "sample")
+  // );
+  // xlsx.writeFile(workbook, outputFilename + ".xlsx");
+
+  const worksheet = xlsx.utils.json_to_sheet(jsonArr);
+  const workbook = {
+    Sheet: {
+      data: worksheet,
+    },
+    SheetNames: ["data"],
+  };
+  const excelBuffer = xlsx.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+
+  const data = new Blob([excelBuffer], { type: EXCEL_TYPE });
+  saveAs(
+    data,
+    outputFilename + "_export" + new Date().getTime() + EXCEL_EXTENSION
+  );
 }
