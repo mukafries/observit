@@ -1,13 +1,11 @@
-var xlsx = require("xlsx");
-
 // toggle navigation menu
 document.getElementById("nav-toggle").addEventListener("click", function () {
   const navMenu = document.getElementById("nav-menu");
   navMenu.classList.toggle("hidden");
 });
 
-const EXCEL_TYPE = ".xlsx";
-const EXCEL_EXTENSION =
+const EXCEL_EXTENSION = ".xlsx";
+const EXCEL_TYPE =
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.charset=UTF-8";
 
 // Add count item
@@ -145,6 +143,7 @@ function renameTitle() {
 
 // Export function
 function exportCountItems() {
+  console.log(window);
   const countItems = document.getElementsByClassName("count-item");
 
   if (countItems.length <= 1) {
@@ -174,7 +173,7 @@ function exportCountItems() {
   }
   const countTitle = document.getElementById("count-title");
 
-  exportToExcel(JSON.stringify(observationData), countTitle.innerText);
+  exportToExcel(observationData, countTitle.innerText);
   console.log("Exported");
 }
 
@@ -186,14 +185,14 @@ function exportToExcel(jsonArr, outputFilename) {
   // );
   // xlsx.writeFile(workbook, outputFilename + ".xlsx");
 
-  const worksheet = xlsx.utils.json_to_sheet(jsonArr);
+  const worksheet = XLSX.utils.json_to_sheet(jsonArr);
   const workbook = {
-    Sheet: {
+    Sheets: {
       data: worksheet,
     },
     SheetNames: ["data"],
   };
-  const excelBuffer = xlsx.write(workbook, {
+  const excelBuffer = XLSX.write(workbook, {
     bookType: "xlsx",
     type: "array",
   });
